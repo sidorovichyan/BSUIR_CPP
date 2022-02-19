@@ -1,1 +1,1 @@
-# BSUIR_KPP
+# BSUIR Cross-Platform Programming
