@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>KPP - Project</title>
+</head>
+<style>
+    form
+    {
+        box-shadow: 1px 1px 5px black;
+        top:15%;
+        font-size: 18px;
+        font-weight: 600;
+
+        width: 30%;
+        padding: 35px;
+        position: absolute;
+        left: 30%;
+        background: aquamarine;
+        border-radius: 5px;
+    }
+    .line
+    {
+        width: 100%;
+        float: left;
+        margin-top: 4%;
+    }
+    label
+    {
+        width: 30%;
+        padding: 5px;
+        float: left;
+    }
+    input
+    {
+        width: 50%;
+        padding: 5px;
+        float: left;
+    }
+    button
+    {
+        padding: 10px;
+        background: greenyellow;
+        border: 1px solid black;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 15px;
+        box-shadow: 1px 1px 5px black;
+        width: 80%;
+        margin-left: 10%;
+        margin-top: 5%;
+        float: left;
+        margin-bottom: 5%;
+        cursor: pointer;
+        transition: 0.1s;
+    }
+    button:hover
+    {
+        box-shadow: 0 0 0 black;
+        border-radius: 0;
+    }
+</style>
+<body style="background: pink">
+
+<form action="#" th:action="@{/}" th:object="${SomthMoving}" method="get">
+    <div class="line">
+        <label>Расстояние</label>
+        <input th:field="*{path}" name="path">
+    </div>
+    <div class="line">
+        <label>Скорость</label>
+        <input th:field="*{speed}" name="speed">
+    </div>
+    <button type="submit">Посчитать</button>
+    <div th:text="'Время прохождения: ' + ${SomthMoving.averangeSpeed}" ></div>
+</form>
+</body>
+</html>
