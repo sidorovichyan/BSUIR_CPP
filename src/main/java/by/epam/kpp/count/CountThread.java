@@ -12,7 +12,6 @@ public class CountThread {
             @Override
             public void run() {
             countAtomic.increment();
-
             }
         });
     }

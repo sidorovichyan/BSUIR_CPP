@@ -35,7 +35,6 @@ public class ControllerIndex {
     public String getIndex(@RequestParam(name = "path", required = false, defaultValue = "1") Double path,
                            @RequestParam(name = "speed", required = false, defaultValue = "1") Double speed,
                            Model model) throws IncorrectDataExeption {
-
         SomthMoving somthMoving = new SomthMoving();
         countThread.startThread();                                              // добавляем +1 к запросам
         double averangeSpeed = findAverageSpeed(path,speed);

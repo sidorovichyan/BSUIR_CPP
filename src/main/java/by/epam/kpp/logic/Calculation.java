@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Calculation {
 
+    private Calculation() {}
+
     private static final Logger logger = LogManager.getLogger(Calculation.class);
 
     public static double findAverageSpeed(double path, double speed) throws IncorrectDataExeption {
