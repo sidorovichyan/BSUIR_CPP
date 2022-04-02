@@ -14,6 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.OptionalDouble;
+
 import static by.epam.kpp.logic.Calculation.findAverageSpeed;
 
 @RestController()
@@ -76,9 +81,31 @@ public class ControllerSomthMoving {
         modelAndView.addObject("SomthMoving", somthMoving);
         modelAndView.setStatus(HttpStatus.OK);
         logger.info("Successfully postMapping");
-
         return modelAndView;
     }
+
+
+    @PostMapping("/bulk")
+    public ResponseEntity<?> doBulk(@RequestBody List<SomthMoving> params)
+    {
+        SomthMoving min = params
+                .stream()
+                .min(Comparator.comparing(SomthMoving::getAverangeSpeed))
+                .orElseThrow(NoSuchElementException::new);
+        SomthMoving max = params
+                .stream()
+                .max(Comparator.comparing(SomthMoving::getAverangeSpeed))
+                .orElseThrow(NoSuchElementException::new);
+
+        OptionalDouble average = params.stream().mapToDouble(SomthMoving::getAverangeSpeed).average();
+
+        logger.info("Successfully postMapping bulk operations");
+        return new ResponseEntity<>(
+                "\nMax result: p = " + max.getPath()+" s = "+max.getSpeed() +" -> "+max.getAverangeSpeed() +
+                        "\nMin result: p = " + min.getPath()+" s = "+min.getSpeed() +" -> "+min.getAverangeSpeed()+
+                        "\nAverange result: "+average.getAsDouble(), HttpStatus.OK);
+    }
+
 
     @GetMapping("/count")
     public ModelAndView doGetCounter()
