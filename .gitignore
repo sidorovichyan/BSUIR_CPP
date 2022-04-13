@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 /.idea/
+=======
+*.iml
+.idea
+out
+>>>>>>> origin/main
