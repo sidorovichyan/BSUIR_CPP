@@ -4,21 +4,22 @@ import by.epam.kpp.entity.SomthMoving;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Component                                                                  // для spring bean
 public class HashCalculation {
 
-    private final HashMap<Double, SomthMoving> hashMap = new HashMap<>();
+    private final Map<SomthMoving, Double> hashMap = new HashMap<>();
 
-    public boolean isContain(Double key) {
+    public boolean isContain(SomthMoving key) {
         return hashMap.containsKey(key);
     }
 
-    public void addToMap(Double key, SomthMoving obj) {
+    public void addToMap(SomthMoving key, Double  obj) {
         hashMap.put(key, obj);
     }
 
-    public SomthMoving getParameters(Double key) {
+    public Double getParameters(SomthMoving key) {
         return hashMap.get(key);
     }
 

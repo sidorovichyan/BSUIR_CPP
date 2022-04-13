@@ -72,7 +72,7 @@
         <input th:field="*{speed}" name="speed">
     </div>
     <button type="submit">Посчитать</button>
-    <div th:text="'Время прохождения: ' + ${SomthMoving.averangeSpeed}" ></div>
+    <div th:text="'Время прохождения: ' + ${timeMoving}" ></div>
     <div style="color: red;padding-top: 10px;font-size: 18px;font-weight: 600" th:text="${Error}" ></div>
 </form>
 </body>
