@@ -13,6 +13,7 @@ public class StartWork {
 
     public static void main(String[] args) {
         logger.info("Start application");
+        System.out.println("hello");
         SpringApplication.run(StartWork.class, args);
     }
 }
