@@ -8,6 +8,7 @@ import by.epam.kpp.logic.HashCalculation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -32,6 +33,11 @@ public class ControllerSomthMoving {
 
     private HashCalculation hashCalculation;
 
+
+    private CountAtomic countAtomic;
+
+    @Autowired
+    public void setCountAtomic(){countAtomic = new CountAtomic();}
     @Autowired
     public void setModelAndView() {
         modelAndView = new ModelAndView();
@@ -45,10 +51,12 @@ public class ControllerSomthMoving {
     @GetMapping()
     public ModelAndView doGet() {
         modelAndView.setViewName("index");
+        System.out.println(Thread.currentThread());
         modelAndView.addObject("SomthMoving", new SomthMoving());
         modelAndView.addObject("timeMoving", 0);
         modelAndView.setStatus(HttpStatus.OK);
-        countThread.startThread();
+        countAtomic.increment();
+        //countThread.startThread();
         logger.info("Successfully getMapping");
         return modelAndView;
     }
