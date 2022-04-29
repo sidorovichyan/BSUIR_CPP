@@ -1,24 +1,18 @@
 package by.epam.kpp.controller;
 
 import by.epam.kpp.count.CountAtomic;
-import by.epam.kpp.count.CountThread;
 import by.epam.kpp.entity.SomthMoving;
 import by.epam.kpp.exeption.IncorrectDataExeption;
 import by.epam.kpp.logic.HashCalculation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.OptionalDouble;
+import java.util.*;
 
 import static by.epam.kpp.logic.Calculation.findAverageSpeed;
 
@@ -28,7 +22,6 @@ public class ControllerSomthMoving {
 
     Logger logger = LogManager.getLogger(ControllerSomthMoving.class);
 
-    private final CountThread countThread = new CountThread();
     private ModelAndView modelAndView;
 
     private HashCalculation hashCalculation;
@@ -86,45 +79,67 @@ public class ControllerSomthMoving {
         logger.info("Successfully postMapping");
         return modelAndView;
 
-//
-
-//    //    hashkey = (path*speed*averangeSpeed)*31;
-//
-//
-//        if(hashCalculation.isContain(hashkey))
-//        {
-//            somthMoving = hashCalculation.getParameters(hashkey);
-//            logger.info("get from HashMap by key: "+hashkey);
-//        }else{
-//            somthMoving = new SomthMoving(path,speed,averangeSpeed);
-//            hashCalculation.addToMap(hashkey,somthMoving);
-//            logger.info("add to HashMap key: "+hashkey);
-//        }
-//        System.out.println("hash "+somthMoving.hashCode());
-//
     }
-
 
     @PostMapping("/bulk")
     public ResponseEntity<?> doBulk(@RequestBody List<SomthMoving> params) {
-//        SomthMoving min = params
-//                .stream()
-//                .min(Comparator.comparing(SomthMoving::getAverangeSpeed))
-//                .orElseThrow(NoSuchElementException::new);
-//        SomthMoving max = params
-//                .stream()
-//                .max(Comparator.comparing(SomthMoving::getAverangeSpeed))
-//                .orElseThrow(NoSuchElementException::new);
-//
-//        OptionalDouble average = params.stream().mapToDouble(SomthMoving::getAverangeSpeed).average();
-//
-//        logger.info("Successfully postMapping bulk operations");
-//        return new ResponseEntity<>(
-//                "\nMax result: p = " + max.getPath()+" s = "+max.getSpeed() +" -> "+max.getAverangeSpeed() +
-//                        "\nMin result: p = " + min.getPath()+" s = "+min.getSpeed() +" -> "+min.getAverangeSpeed()+
-//                        "\nAverange result: "+average.getAsDouble(), HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        List<Double> rezults = new ArrayList<>();
+
+        for (SomthMoving smth:params) {
+            try {
+                rezults.add(findAverageSpeed(smth.getPath(),smth.getSpeed()));
+            } catch (IncorrectDataExeption e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        Map<String, Object> mapa = new HashMap<>();
+
+        mapa.put("avergeRezult", rezults
+                .stream()
+                .mapToDouble(d -> d)
+                .average()
+                .orElseThrow(NoSuchElementException::new));
+
+        mapa.put("maxRezult", rezults
+                .stream()
+                .mapToDouble(d -> d)
+                .max()
+                .orElseThrow(NoSuchElementException::new));
+
+        mapa.put("minRezult", rezults
+                .stream()
+                .mapToDouble(d -> d)
+                .min()
+                .orElseThrow(NoSuchElementException::new));
+
+        mapa.put("minPath", params
+                .stream()
+                .min(Comparator.comparing(SomthMoving::getPath))
+                .orElseThrow(NoSuchElementException::new));
+
+        mapa.put("minSpeed", params
+                .stream()
+                .min(Comparator.comparing(SomthMoving::getSpeed))
+                .orElseThrow(NoSuchElementException::new));
+
+        mapa.put("maxPath", params
+                .stream()
+                .max(Comparator.comparing(SomthMoving::getPath))
+                .orElseThrow(NoSuchElementException::new));
+
+        mapa.put("maxSpeed", params
+                .stream()
+                .max(Comparator.comparing(SomthMoving::getSpeed))
+                .orElseThrow(NoSuchElementException::new));
+
+        return new ResponseEntity<>(mapa,HttpStatus.OK);
     }
+
+
+
 
 
     @GetMapping("/count")
