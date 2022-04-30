@@ -31,6 +31,7 @@ public class ControllerSomthMoving {
 
     @Autowired
     public void setCountAtomic(){countAtomic = new CountAtomic();}
+
     @Autowired
     public void setModelAndView() {
         modelAndView = new ModelAndView();
@@ -44,12 +45,10 @@ public class ControllerSomthMoving {
     @GetMapping()
     public ModelAndView doGet() {
         modelAndView.setViewName("index");
-        System.out.println(Thread.currentThread());
         modelAndView.addObject("SomthMoving", new SomthMoving());
         modelAndView.addObject("timeMoving", 0);
         modelAndView.setStatus(HttpStatus.OK);
         countAtomic.increment();
-        //countThread.startThread();
         logger.info("Successfully getMapping");
         return modelAndView;
     }
